@@ -42,7 +42,9 @@ class ViewController: UIViewController {
         if results?.count > 0 {
             for result:AnyObject in results! {
                 println(result.valueForKey("username"))
-                println(result.valueForKey("password"))
+                if let pass = result.valueForKey("password") as? String {
+                    println(pass)
+                }
             }
         } else {
             println("No database found")
