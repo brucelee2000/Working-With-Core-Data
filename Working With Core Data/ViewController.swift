@@ -31,8 +31,8 @@ class ViewController: UIViewController {
         var newUserError:NSError? = nil
         context.save(&newUserError)
         
-        // +--- Database access ---+
-        // +-----------------------+
+        // +--- Database modification ---+
+        // +-----------------------------+
         // Step1. Create the request to access the database
         var request = NSFetchRequest(entityName: "Users")
         request.returnsObjectsAsFaults = false
@@ -49,7 +49,11 @@ class ViewController: UIViewController {
                         // Step3.1 Delete an item from the table in the database
                         context.deleteObject(result as NSManagedObject)
                         println("\(user) is deleted")
+                    } else if user == "Kyle" {
+                        // Step3.2 Change an item of the table in the database
+                        result.setValue("Kyle pass changed", forKey: "password")
                     }
+                    
                 }
                 if let pass = result.valueForKey("password") as? String {
                     println(pass)
@@ -59,6 +63,17 @@ class ViewController: UIViewController {
             println("No database found")
         }
         
+        // +--- Database search ---+
+        // +-----------------------+
+        // The predicate is used to constrain the selection of objects the receiver is to fetch
+        // - %@ as the placeholder for argument "Kyle"
+        request.predicate = NSPredicate(format: "username = %@", "Kyle")
+        var newResults = context.executeFetchRequest(request, error: &requestError)
+        if newResults?.count > 0 {
+            println(newResults)
+        } else {
+            println("No matched database found")
+        }
     }
     
 
