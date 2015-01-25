@@ -25,6 +25,8 @@ class ViewController: UIViewController {
         var newUser = NSEntityDescription.insertNewObjectForEntityForName("Users", inManagedObjectContext: context) as NSManagedObject
         newUser.setValue("Rob", forKey: "username")
         newUser.setValue("pass", forKey: "password")
+        newUser.setValue("Kyle", forKey: "username")
+        newUser.setValue("pass2", forKey: "password")
         // Step4. Save the database
         var newUserError:NSError? = nil
         context.save(&newUserError)
@@ -42,6 +44,13 @@ class ViewController: UIViewController {
         if results?.count > 0 {
             for result:AnyObject in results! {
                 println(result.valueForKey("username"))
+                if let user = result.valueForKey("username") as? String {
+                    if user == "Rob" {
+                        // Step3.1 Delete an item from the table in the database
+                        context.deleteObject(result as NSManagedObject)
+                        println("\(user) is deleted")
+                    }
+                }
                 if let pass = result.valueForKey("password") as? String {
                     println(pass)
                 }
@@ -49,7 +58,6 @@ class ViewController: UIViewController {
         } else {
             println("No database found")
         }
-
         
     }
     
